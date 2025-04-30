@@ -1,0 +1,34 @@
+#https://chatgpt.com/c/681222ae-19f4-8006-b7cd-0f32c92e5bd3
+name: Run Go tests for mars-go-tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Restore dependencies
+        run: go mod download
+
+      - name: Run tests
+        env:
+          NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
+        run: go test ./... -v
+
+      - name: Upload test results (optional, for debugging)
+        if: failure()
+        run: |
+          echo "Tests failed. Check logs above."
