@@ -1,4 +1,3 @@
-#https://chatgpt.com/c/681222ae-19f4-8006-b7cd-0f32c92e5bd3
 name: Run Go tests for mars-go-tests
 
 on:
