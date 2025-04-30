@@ -2,6 +2,7 @@
 
 ![Go Version](https://img.shields.io/badge/Go-1.20%2B-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Go Tests](https://github.com/slazarska/mars-go-tests/actions/workflows/run-tests.yml/badge.svg)
 
 A small educational Go project for testing Mars Rover Photos API by NASA.
 
