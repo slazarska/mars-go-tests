@@ -12,12 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func SetTestAPIKey(t *testing.T) {
+func SetTestAPIKey() {
 	config.SetAPIKey("test_key")
 }
 
 func TestMockGetMarsPhotos(t *testing.T) {
-	SetTestAPIKey(t)
+	SetTestAPIKey()
 
 	// Создаем мок-ответ
 	mockResponse := models.PhotoResponse{
@@ -39,8 +39,11 @@ func TestMockGetMarsPhotos(t *testing.T) {
 	}
 
 	// Мок-сервер
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(mockResponse)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		err := json.NewEncoder(w).Encode(mockResponse)
+		if err != nil {
+			return
+		}
 	}))
 	defer server.Close()
 

@@ -1,0 +1,16 @@
+linters:
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - gosimple
+    - unused
+    - revive
+    - gofmt
+
+  disable:
+    - gocyclo
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

@@ -1,4 +1,4 @@
-name: Run Go tests for mars-go-tests
+name: Run Go tests and lint for mars-go-tests
 
 on:
   push:
@@ -24,6 +24,11 @@ jobs:
         env:
           NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
         run: go test ./... -v
+
+      - name: Run golangci-lint
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          golangci-lint run ./...
 
       - name: Upload test results (optional, for debugging)
         if: failure()
