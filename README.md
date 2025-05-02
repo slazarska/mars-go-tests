@@ -15,8 +15,11 @@ It includes:
 
 - Real API integration
 - Struct-based JSON decoding
-- Table-driven unit tests
-- Basic mocking (optional)
+- Table-driven integration tests
+- Mock-tests
+- Logging with slog
+- Allure reports
+- GitHub Actions workflow for CI (automated testing)
 
 ## 📁 Project Structure
 ```
