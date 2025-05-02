@@ -1,0 +1,17 @@
+{
+  "photos": [
+    {
+      "id": 12345,
+      "sol": 1000,
+      "img_src": "http://example.com/image.jpg",
+      "earth_date": "2015-06-03",
+      "camera": {
+        "name": "FHAZ",
+        "full_name": "Front Hazard Avoidance Camera"
+      },
+      "rover": {
+        "name": "Curiosity"
+      }
+    }
+  ]
+}

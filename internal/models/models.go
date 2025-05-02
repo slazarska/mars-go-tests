@@ -1,6 +1,6 @@
 package models
 
-type PhotoResponse struct {
+type RoverResponse struct {
 	Photos []Photo `json:"photos"`
 }
 

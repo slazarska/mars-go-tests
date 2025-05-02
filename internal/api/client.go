@@ -18,7 +18,7 @@ func SetAPIKey(key string) {
 	config.SetAPIKey(key)
 }
 
-func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models.PhotoResponse, error) {
+func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models.RoverResponse, error) {
 	apiKey := config.APIKey()
 	if apiKey == "" {
 		return nil, fmt.Errorf("API key is missing")
@@ -50,7 +50,7 @@ func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	var result models.PhotoResponse
+	var result models.RoverResponse
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, fmt.Errorf("failed to decode response body: %w", err)
 	}
