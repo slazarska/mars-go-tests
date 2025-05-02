@@ -3,10 +3,11 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
+
+	"github.com/slazarska/mars-go-tests/internal/log"
 )
 
 var apiKey string
@@ -23,7 +24,7 @@ func LoadConfig() error {
 
 	if envKey := os.Getenv("NASA_API_KEY"); envKey != "" {
 		apiKey = envKey
-		fmt.Println("loaded API key from environment variable")
+		log.Info("loaded API key from environment variable")
 		return nil
 	}
 
@@ -33,15 +34,16 @@ func LoadConfig() error {
 	}
 
 	configPath := filepath.Join(filepath.Dir(currentFile), "..", "..", "internal", "config", "config.json")
-	fmt.Println("looking for config file at:", configPath)
+	log.Info("looking for config file at:", "path", configPath)
 
 	file, err := os.Open(configPath)
 	if err != nil {
+		log.Error("failed to open config file", "error", err)
 		return fmt.Errorf("failed to open config file: %w", err)
 	}
 	defer func() {
 		if err := file.Close(); err != nil {
-			log.Printf("failed to close config file: %v\n", err)
+			log.Error("failed to close config file", "error", err)
 		}
 	}()
 
@@ -50,14 +52,16 @@ func LoadConfig() error {
 	}
 
 	if err := json.NewDecoder(file).Decode(&config); err != nil {
+		log.Error("failed to decode config file", "error", err)
 		return fmt.Errorf("failed to decode config file: %w", err)
 	}
 
 	if config.APIKey == "" {
+		log.Error("api_key is empty in config file")
 		return fmt.Errorf("api_key is empty in config file")
 	}
 
 	apiKey = config.APIKey
-	fmt.Println("loaded API key from config file")
+	log.Info("loaded API key from config file")
 	return nil
 }

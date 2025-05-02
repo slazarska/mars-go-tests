@@ -19,7 +19,6 @@ func SetTestAPIKey() {
 func TestMockGetMarsPhotos(t *testing.T) {
 	SetTestAPIKey()
 
-	// Создаем мок-ответ
 	mockResponse := models.PhotoResponse{
 		Photos: []models.Photo{
 			{
@@ -38,7 +37,6 @@ func TestMockGetMarsPhotos(t *testing.T) {
 		},
 	}
 
-	// Мок-сервер
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		err := json.NewEncoder(w).Encode(mockResponse)
 		if err != nil {
@@ -47,13 +45,10 @@ func TestMockGetMarsPhotos(t *testing.T) {
 	}))
 	defer server.Close()
 
-	// Локально определяем BaseURL для теста
 	mockBaseURL := server.URL + "/rovers/%s/photos?sol=%s&camera=%s&api_key=%s"
 
-	// Вызываем API метод с этим мок-URL
 	result, err := api.GetMarsPhotos("curiosity", "fhaz", "1000", mockBaseURL)
 
-	// Assertions
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, 1, len(result.Photos))
