@@ -195,19 +195,16 @@ func TestGetMarsPhotosInvalidCameraReturnsEmptyList(t *testing.T) {
 		resp, err := api.GetMarsPhotos("opportunity", "NonExistingCamera", test.Sol)
 
 		t.WithNewStep("Check error", func(sCtx provider.StepCtx) {
-			// 1) Ошибки не должно быть
 			assert.NoError(sCtx, err)
 			sCtx.WithNewAttachment("Error Check Result", allure.Text, []byte("No error returned from API"))
 		})
 
 		t.WithNewStep("Check response", func(sCtx provider.StepCtx) {
-			// 2) Ответ не nil
 			assert.NotNil(sCtx, resp)
 			sCtx.WithNewAttachment("Response Check Result", allure.Text, []byte("Response object is not nil"))
 		})
 
 		t.WithNewStep("Check photos empty", func(sCtx provider.StepCtx) {
-			// 3) Список фото должен быть пустым
 			assert.Empty(sCtx, resp.Photos, fmt.Sprintf("Expected no photos for invalid camera on sol %s", test.Sol))
 			sCtx.WithNewAttachment(
 				"Photos Count",
