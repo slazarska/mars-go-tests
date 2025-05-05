@@ -3,13 +3,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-
 	"github.com/slazarska/mars-go-tests/internal/config"
 	"github.com/slazarska/mars-go-tests/internal/constants"
 	"github.com/slazarska/mars-go-tests/internal/log"
 	"github.com/slazarska/mars-go-tests/internal/models"
+	"io"
+	"net/http"
 )
 
 var BaseURL = constants.BaseURL
@@ -42,13 +41,24 @@ func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models
 	}()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		body := string(bodyBytes)
 		log.Error("unexpected response",
 			"status", resp.StatusCode,
-			"body", string(body),
+			"body", body,
 		)
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		// Включаем тело в текст ошибки
+		return nil, fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, body)
 	}
+	/*
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			log.Error("unexpected response",
+				"status", resp.StatusCode,
+				"body", string(body),
+			)
+			return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		}*/
 
 	var result models.RoverResponse
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {

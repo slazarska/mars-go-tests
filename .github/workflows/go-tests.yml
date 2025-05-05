@@ -17,6 +17,12 @@ jobs:
         with:
           go-version: '1.24'
 
+      - name: Install allure-go dependencies
+        run: |
+          go get github.com/ozontech/allure-go/pkg/allure
+          go get github.com/ozontech/allure-go/pkg/framework/provider
+          go mod tidy
+
       - name: Restore dependencies
         run: go mod download
 

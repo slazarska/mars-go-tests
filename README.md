@@ -20,17 +20,21 @@ It includes:
 - Logging with slog
 - Allure reports
 - GitHub Actions workflow for CI (automated testing)
+- Linter golangci-lint
 
 ## 📁 Project Structure
 ```
 mars-go-tests/
-├── cmd/                 # Entry point (optional CLI usage)
+├── .github/             
+│   ├── workflows/       # GitHub Actions
+├── cmd/                 # Entry point
 ├── internal/
 │   ├── api/             # API client logic
 │   ├── config/          # Configuration loading
 │   ├── constants/       # Base URL and other constants
+│   ├── log/             # Logger
 │   ├── models/          # Structs matching NASA's JSON format
-├── test/                # Integration tests using real API
+├── test/                # Integration tests using real API, mock-tests, test data, test utils
 ├── go.mod / go.sum
 └── README.md
 ```
@@ -68,7 +72,7 @@ You'll see real-time responses from NASA's API being tested.
 ### Example Test
 Here's what one test looks like:
 ```
-result, err := api.GetMarsPhotos("curiosity", "fhaz", "1000")
+resp, err := api.GetMarsPhotos("curiosity", "fhaz", "1000")
 assert.NoError(t, err)
 assert.Greater(t, len(result.Photos), 0)
 ```
