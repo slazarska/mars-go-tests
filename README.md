@@ -17,6 +17,7 @@ It includes:
 - Struct-based JSON decoding
 - Table-driven integration tests
 - Mock-tests
+- Positive and negative tests
 - Logging with slog
 - Allure reports
 - GitHub Actions workflow for CI (automated testing)
@@ -27,7 +28,6 @@ It includes:
 mars-go-tests/
 ├── .github/             
 │   ├── workflows/       # GitHub Actions
-├── cmd/                 # Entry point
 ├── internal/
 │   ├── api/             # API client logic
 │   ├── config/          # Configuration loading
