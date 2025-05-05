@@ -1,4 +1,4 @@
-package test_utils
+package utils
 
 import (
 	"encoding/json"
@@ -58,9 +58,12 @@ func LoadMockJSON(t provider.T, filename string, target interface{}) error {
 }
 
 func CreateMockServer(mockResponse models.RoverResponse) *httptest.Server {
-	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(mockResponse)
+		err := json.NewEncoder(w).Encode(mockResponse)
+		if err != nil {
+			return
+		}
 	}))
 }

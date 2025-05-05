@@ -3,24 +3,24 @@ package test
 import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/runner"
-	"github.com/slazarska/mars-go-tests/test/test_utils"
+	"github.com/slazarska/mars-go-tests/test/utils"
 	"testing"
 )
 
 func TestMockGetMarsPhotos(t *testing.T) {
 	runner.Run(t, "MockGetMarsPhotos", func(t provider.T) {
-		test_utils.SetTestAPIKey()
+		utils.SetTestAPIKey()
 
 		t.Run("success with one photo", func(t provider.T) {
-			test_utils.RunTestWithMockData(t, "mock_response.json", 1, "Curiosity", "http://example.com/image.jpg")
+			utils.RunTestWithMockData(t, "mock_response.json", 1, "Curiosity", "http://example.com/image.jpg")
 		})
 
 		t.Run("success with empty photo list", func(t provider.T) {
-			test_utils.RunTestWithMockData(t, "empty_response.json", 0, "", "")
+			utils.RunTestWithMockData(t, "empty_response.json", 0, "", "")
 		})
 
 		t.Run("internal server error", func(t provider.T) {
-			test_utils.RunTestWithError(t)
+			utils.RunTestWithError(t)
 		})
 	})
 }

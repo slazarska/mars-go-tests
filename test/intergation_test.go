@@ -7,7 +7,7 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/slazarska/mars-go-tests/internal/api"
 	test "github.com/slazarska/mars-go-tests/internal/constants"
-	"github.com/slazarska/mars-go-tests/test/test_utils"
+	"github.com/slazarska/mars-go-tests/test/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -20,7 +20,7 @@ func TestGetMarsPhotosSpirit(t *testing.T) {
 		t.Tags("Spirit", "Mars", "API test", "Integration test")
 		t.Severity(allure.BLOCKER)
 
-		test_utils.SetupRealAPIKey(t)
+		utils.SetupRealAPIKey(t)
 
 		tests := []struct {
 			name   string
@@ -49,11 +49,11 @@ func TestGetMarsPhotosSpirit(t *testing.T) {
 				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
 
 				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					test_utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
+					utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
 				})
 
 				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					test_utils.AllureAttachments(sCtx, resp)
+					utils.AllureAttachments(sCtx, resp)
 				})
 			})
 		}
@@ -68,7 +68,7 @@ func TestGetMarsPhotosOpportunity(t *testing.T) {
 		t.Tags("Opportunity", "Mars", "API test", "Integration test")
 		t.Severity(allure.BLOCKER)
 
-		test_utils.SetupRealAPIKey(t)
+		utils.SetupRealAPIKey(t)
 
 		tests := []struct {
 			name   string
@@ -97,11 +97,11 @@ func TestGetMarsPhotosOpportunity(t *testing.T) {
 				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
 
 				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					test_utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
+					utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
 				})
 
 				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					test_utils.AllureAttachments(sCtx, resp)
+					utils.AllureAttachments(sCtx, resp)
 				})
 			})
 		}
@@ -116,7 +116,7 @@ func TestGetMarsPhotosCuriosity(t *testing.T) {
 		t.Tags("Curiosity", "Mars", "API test", "Integration test")
 		t.Severity(allure.BLOCKER)
 
-		test_utils.SetupRealAPIKey(t)
+		utils.SetupRealAPIKey(t)
 
 		tests := []struct {
 			name   string
@@ -147,11 +147,11 @@ func TestGetMarsPhotosCuriosity(t *testing.T) {
 				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
 
 				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					test_utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
+					utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
 				})
 
 				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					test_utils.AllureAttachments(sCtx, resp)
+					utils.AllureAttachments(sCtx, resp)
 				})
 			})
 		}
@@ -166,7 +166,7 @@ func TestGetMarsPhotosInvalidRoverReturnsError(t *testing.T) {
 		t.Tags("Error", "Mars", "API test", "Integration test")
 		t.Severity(allure.MINOR)
 
-		test_utils.SetupRealAPIKey(t)
+		utils.SetupRealAPIKey(t)
 
 		resp, err := api.GetMarsPhotos("NonExistingRover", "fhaz", test.Sol)
 
@@ -190,7 +190,7 @@ func TestGetMarsPhotosInvalidCameraReturnsEmptyList(t *testing.T) {
 		t.Tags("Error", "Mars", "API test", "Integration test")
 		t.Severity(allure.MINOR)
 
-		test_utils.SetupRealAPIKey(t)
+		utils.SetupRealAPIKey(t)
 
 		resp, err := api.GetMarsPhotos("opportunity", "NonExistingCamera", test.Sol)
 

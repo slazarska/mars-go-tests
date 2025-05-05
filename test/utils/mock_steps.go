@@ -1,4 +1,4 @@
-package test_utils
+package utils
 
 import (
 	"encoding/json"
@@ -62,7 +62,7 @@ func RunTestWithError(t provider.T) {
 		))
 	})
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
 	defer server.Close()
