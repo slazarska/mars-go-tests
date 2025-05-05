@@ -11,8 +11,6 @@ import (
 	"net/http"
 )
 
-var BaseURL = constants.BaseURL
-
 func SetAPIKey(key string) {
 	config.SetAPIKey(key)
 }
@@ -23,7 +21,7 @@ func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models
 		return nil, fmt.Errorf("API key is missing")
 	}
 
-	url := fmt.Sprintf(BaseURL, rover, solValue, camera, apiKey)
+	url := fmt.Sprintf(constants.BaseURL, rover, solValue, camera, apiKey)
 	if len(customURL) > 0 {
 		url = fmt.Sprintf(customURL[0], rover, solValue, camera, apiKey)
 	}
@@ -47,18 +45,8 @@ func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models
 			"status", resp.StatusCode,
 			"body", body,
 		)
-		// Включаем тело в текст ошибки
 		return nil, fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, body)
 	}
-	/*
-		if resp.StatusCode != http.StatusOK {
-			body, _ := io.ReadAll(resp.Body)
-			log.Error("unexpected response",
-				"status", resp.StatusCode,
-				"body", string(body),
-			)
-			return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-		}*/
 
 	var result models.RoverResponse
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
