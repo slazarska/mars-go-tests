@@ -4,6 +4,8 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Go Tests](https://github.com/slazarska/mars-go-tests/actions/workflows/go-tests.yml/badge.svg)
 
+![NASA Mars Rover banner](images/banner.jpg)
+
 A small educational Go project for testing Mars Rover Photos API by NASA.
 
 ## 🛰️ Project Description
