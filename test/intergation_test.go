@@ -6,131 +6,37 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/slazarska/mars-go-tests/internal/api"
-	test "github.com/slazarska/mars-go-tests/internal/constants"
+	"github.com/slazarska/mars-go-tests/test/testdata"
 	"github.com/slazarska/mars-go-tests/test/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestGetMarsPhotosSpirit(t *testing.T) {
-	runner.Run(t, "Get photos by Spirit and camera", func(t provider.T) {
-		t.Epic("Mars Open API")
-		t.Feature("Mar Rover's Photos")
-		t.Story("Mars Rover Spirit's cameras")
-		t.Tags("Spirit", "Mars", "API test", "Integration test")
-		t.Severity(allure.BLOCKER)
-
-		utils.SetupRealAPIKey(t)
-
-		tests := []struct {
-			name   string
-			rover  string
-			camera string
-			sol    string
-		}{
-			{"Photos for rover Spirit with camera FHAZ", "spirit", "fhaz", test.Sol},
-			{"Photos for rover Spirit with camera RHAZ", "spirit", "rhaz", test.Sol},
-			{"Photos for rover Spirit with camera NAVCAM", "spirit", "navcam", test.Sol},
-			{"Photos for rover Spirit with camera PANCAM", "spirit", "pancam", test.Sol},
-			{"Photos for rover Spirit with camera MINITES", "spirit", "minites", test.Sol},
-		}
-
-		for _, tt := range tests {
-			t.Run(tt.name, func(t provider.T) {
-				t.Title(tt.name)
-				t.Descriptionf("Test getting photos for Spirit with camera %s on sol 54", tt.camera)
-
-				t.WithParameters(
-					allure.NewParameter("Rover", tt.rover),
-					allure.NewParameter("Camera", tt.camera),
-					allure.NewParameter("Sol", tt.sol),
-				)
-
-				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
-
-				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
-				})
-
-				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					utils.AllureAttachments(sCtx, resp)
-				})
-			})
-		}
-	})
-}
-
-func TestGetMarsPhotosOpportunity(t *testing.T) {
-	runner.Run(t, "Get photos by Opportunity and camera", func(t provider.T) {
-		t.Epic("Mars Open API")
-		t.Feature("Mar Rover's Photos")
-		t.Story("Mars Rover Opportunity's cameras")
-		t.Tags("Opportunity", "Mars", "API test", "Integration test")
-		t.Severity(allure.BLOCKER)
-
-		utils.SetupRealAPIKey(t)
-
-		tests := []struct {
-			name   string
-			rover  string
-			camera string
-			sol    string
-		}{
-			{"Photos for rover Opportunity with camera FHAZ", "opportunity", "fhaz", test.Sol},
-			{"Photos for rover Opportunity with camera RHAZ", "opportunity", "rhaz", test.Sol},
-			{"Photos for rover Opportunity with camera NAVCAM", "opportunity", "navcam", test.Sol},
-			{"Photos for rover Opportunity with camera PANCAM", "opportunity", "pancam", test.Sol},
-			{"Photos for rover Opportunity with camera MINITES", "opportunity", "minites", test.Sol},
-		}
-
-		for _, tt := range tests {
-			t.Run(tt.name, func(t provider.T) {
-				t.Title(tt.name)
-				t.Descriptionf("Test getting photos for Opportunity with camera %s on sol 100", tt.camera)
-
-				t.WithParameters(
-					allure.NewParameter("Rover", tt.rover),
-					allure.NewParameter("Camera", tt.camera),
-					allure.NewParameter("Sol", tt.sol),
-				)
-
-				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
-
-				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					utils.AssertsGetMarsPhotos(sCtx, tt.name, resp, err, tt.sol, tt.camera)
-				})
-
-				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					utils.AllureAttachments(sCtx, resp)
-				})
-			})
-		}
-	})
-}
-
-func TestGetMarsPhotosCuriosity(t *testing.T) {
+func TestGetMarsPhotos(t *testing.T) {
 	runner.Run(t, "Get photos by Curiosity and camera", func(t provider.T) {
 		t.Epic("Mars Open API")
-		t.Feature("Mar Rover's Photos")
+		t.Feature("Mars Rover's Photos")
 		t.Story("Mars Rover Curiosity's cameras")
 		t.Tags("Curiosity", "Mars", "API test", "Integration test")
 		t.Severity(allure.BLOCKER)
 
 		utils.SetupRealAPIKey(t)
 
+		testSol := testdata.GetRandomSolCuriosity()
+
 		tests := []struct {
 			name   string
 			rover  string
 			camera string
 			sol    string
 		}{
-			{"Photos for rover Curiosity with camera FHAZ", "curiosity", "fhaz", test.Sol},
-			{"Photos for rover Curiosity with camera RHAZ", "curiosity", "rhaz", test.Sol},
-			{"Photos for rover Curiosity with camera MAST", "curiosity", "mast", test.Sol},
-			{"Photos for rover Curiosity with camera CHEMCAM", "curiosity", "chemcam", test.Sol},
-			{"Photos for rover Curiosity with camera MAHLI", "curiosity", "mahli", test.Sol},
-			{"Photos for rover Curiosity with camera NAVCAM", "curiosity", "navcam", test.Sol},
-			{"Photos for rover Curiosity with camera MARDI", "curiosity", "mardi", test.Sol},
+			{"Photos for rover Curiosity with camera FHAZ", "curiosity", "fhaz", testSol},
+			{"Photos for rover Curiosity with camera RHAZ", "curiosity", "rhaz", testSol},
+			{"Photos for rover Curiosity with camera MAST", "curiosity", "mast", testSol},
+			{"Photos for rover Curiosity with camera CHEMCAM", "curiosity", "chemcam", testSol},
+			{"Photos for rover Curiosity with camera MAHLI", "curiosity", "mahli", testSol},
+			{"Photos for rover Curiosity with camera NAVCAM", "curiosity", "navcam", testSol},
+			{"Photos for rover Curiosity with camera MARDI", "curiosity", "mardi", testSol},
 		}
 
 		for _, tt := range tests {
@@ -168,7 +74,9 @@ func TestGetMarsPhotosInvalidRoverReturnsError(t *testing.T) {
 
 		utils.SetupRealAPIKey(t)
 
-		resp, err := api.GetMarsPhotos("NonExistingRover", "fhaz", test.Sol)
+		testSol := testdata.GetRandomSolCuriosity()
+
+		resp, err := api.GetMarsPhotos("NonExistingRover", "fhaz", testSol)
 
 		t.WithNewStep("Check error is returned", func(sCtx provider.StepCtx) {
 			assert.Error(sCtx, err)
@@ -192,7 +100,9 @@ func TestGetMarsPhotosInvalidCameraReturnsEmptyList(t *testing.T) {
 
 		utils.SetupRealAPIKey(t)
 
-		resp, err := api.GetMarsPhotos("opportunity", "NonExistingCamera", test.Sol)
+		testSol := testdata.GetRandomSolCuriosity()
+
+		resp, err := api.GetMarsPhotos("opportunity", "NonExistingCamera", testSol)
 
 		t.WithNewStep("Check error", func(sCtx provider.StepCtx) {
 			assert.NoError(sCtx, err)
@@ -205,7 +115,7 @@ func TestGetMarsPhotosInvalidCameraReturnsEmptyList(t *testing.T) {
 		})
 
 		t.WithNewStep("Check photos empty", func(sCtx provider.StepCtx) {
-			assert.Empty(sCtx, resp.Photos, fmt.Sprintf("Expected no photos for invalid camera on sol %s", test.Sol))
+			assert.Empty(sCtx, resp.Photos, fmt.Sprintf("Expected no photos for invalid camera on sol %s", testSol))
 			sCtx.WithNewAttachment(
 				"Photos Count",
 				allure.Text,

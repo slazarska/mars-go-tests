@@ -11,9 +11,10 @@ import (
 )
 
 func RunTestWithMockData(t provider.T, filename string, expectedPhotoCount int, expectedRoverName, expectedImgSrc string) {
-	t.Epic("API Tests")
-	t.Feature("Mars Photos API")
-	t.Story("Get photos")
+	t.Epic("Mars Open API")
+	t.Feature("Mar Rover's Photos")
+	t.Story("Mock-server")
+	t.Tags("mock", "mock-test")
 
 	var mockResponse models.RoverResponse
 	err := LoadMockJSON(t, filename, &mockResponse)
@@ -35,24 +36,25 @@ func RunTestWithMockData(t provider.T, filename string, expectedPhotoCount int, 
 	defer server.Close()
 
 	mockBaseURL := server.URL + "/rovers/%s/photos?sol=%s&camera=%s&api_key=%s"
-	result, err := api.GetMarsPhotos("curiosity", "fhaz", "1000", mockBaseURL)
+	resp, err := api.GetMarsPhotos("curiosity", "fhaz", "1000", mockBaseURL)
 
 	t.WithNewStep("Assertions", func(ctx provider.StepCtx) {
 		ctx.Require().NoError(err)
-		ctx.Require().NotNil(result)
-		ctx.Assert().Equal(expectedPhotoCount, len(result.Photos))
+		ctx.Require().NotNil(resp)
+		ctx.Assert().Equal(expectedPhotoCount, len(resp.Photos))
 
 		if expectedPhotoCount > 0 {
-			ctx.Assert().Equal(expectedRoverName, result.Photos[0].Rover.Name)
-			ctx.Assert().Equal(expectedImgSrc, result.Photos[0].ImgSrc)
+			ctx.Assert().Equal(expectedRoverName, resp.Photos[0].Rover.Name)
+			ctx.Assert().Equal(expectedImgSrc, resp.Photos[0].ImgSrc)
 		}
 	})
 }
 
 func RunTestWithError(t provider.T) {
-	t.Epic("API Tests")
-	t.Feature("Mars Photos API")
-	t.Story("Handle server error")
+	t.Epic("Mars Open API")
+	t.Feature("Mar Rover's Photos")
+	t.Story("Mock-server")
+	t.Tags("mock", "mock-test")
 
 	t.WithNewStep("Simulate server error", func(ctx provider.StepCtx) {
 		ctx.WithAttachments(allure.NewAttachment(
@@ -68,10 +70,10 @@ func RunTestWithError(t provider.T) {
 	defer server.Close()
 
 	mockBaseURL := server.URL + "/rovers/%s/photos?sol=%s&camera=%s&api_key=%s"
-	result, err := api.GetMarsPhotos("curiosity", "fhaz", "1000", mockBaseURL)
+	resp, err := api.GetMarsPhotos("curiosity", "fhaz", "1000", mockBaseURL)
 
 	t.WithNewStep("Assertions for error response", func(ctx provider.StepCtx) {
 		ctx.Require().Error(err)
-		ctx.Require().Nil(result)
+		ctx.Require().Nil(resp)
 	})
 }
