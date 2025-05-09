@@ -36,7 +36,32 @@ jobs:
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           golangci-lint run ./...
 
+      - name: Install Allure CLI
+        run: |
+          curl -o allure.zip -L https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.zip
+          unzip -q allure.zip -d /opt/
+          sudo mv /opt/allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          allure generate test/allure-results --clean -o test/allure-report
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: test/allure-results
+
+      - name: Upload Allure report (HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: test/allure-report
+
       - name: Upload test results (optional, for debugging)
         if: failure()
-        run: |
-          echo "Tests failed. Check logs above."
+        run: echo "Tests failed. Check logs above."
