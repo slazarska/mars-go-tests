@@ -3,7 +3,9 @@ internal/config/config.json
 
 # Allure
 allure-results/
+!test/allure-results/
 allure-report/
+!test/allure-report/
 allure-*.tgz
 
 # If you prefer the allow list template instead of the deny list, see community template:

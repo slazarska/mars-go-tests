@@ -43,10 +43,14 @@ jobs:
           sudo mv /opt/allure-2.27.0 /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
-      - name: Generate Allure report
+      - name: Generate Allure report (if data exists)
         if: always()
         run: |
-          allure generate test/allure-results --clean -o test/allure-report
+            if [ -d "test/allure-results" ] && [ "$(ls -A test/allure-results)" ]; then
+              allure generate test/allure-results --clean -o test/allure-report
+            else
+              echo "No Allure results found, skipping report generation."
+            fi
 
       - name: Upload Allure results
         if: always()
