@@ -35,44 +35,31 @@ jobs:
         run: |
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           golangci-lint run ./...
-
-      - name: Install Allure CLI
+          
+      - name: Set up Java (required by Allure CLI)
         uses: actions/setup-java@v4
         with:
-            distribution: 'temurin'
-            java-version: '17'
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Download and install Allure
+      - name: Download and install Allure CLI
         run: |
-                curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.tgz
-                tar -xzf allure.tgz
-                sudo mv allure-2.27.0 /opt/allure
-                sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-                allure --version
+            curl -L -o allure.tgz https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+            tar -xzf allure.tgz
+            sudo mv allure-2.27.0 /opt/allure
+            sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+            allure --version
 
       - name: Generate Allure report (if data exists)
         if: always()
         run: |
-            if [ -d "test/allure-results" ] && [ "$(ls -A test/allure-results)" ]; then
-              allure generate test/allure-results --clean -o test/allure-report
-            else
-              echo "No Allure results found, skipping report generation."
-            fi
-
-      - name: Upload Allure results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: test/allure-results
-
-      - name: Upload Allure report (HTML)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: test/allure-report
+          if [ -d "test/allure-results" ] && [ "$(ls -A test/allure-results)" ]; then
+            allure generate test/allure-results --clean -o test/allure-report
+          else
+            echo "No Allure results found, skipping report generation."
+          fi
 
       - name: Upload test results (optional, for debugging)
         if: failure()
-        run: echo "Tests failed. Check logs above."
+        run: |
+          echo "Tests failed. Check logs above."
