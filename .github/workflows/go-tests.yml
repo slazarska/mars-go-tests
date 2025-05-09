@@ -17,6 +17,14 @@ jobs:
         with:
           go-version: '1.24'
 
+      - name: Cache Go modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/go-build
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-mod-
+
       - name: Install allure-go dependencies
         run: |
           go get github.com/ozontech/allure-go/pkg/allure
@@ -35,7 +43,7 @@ jobs:
         run: |
           go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           golangci-lint run ./...
-          
+
       - name: Set up Java (required by Allure CLI)
         uses: actions/setup-java@v4
         with:
@@ -44,16 +52,17 @@ jobs:
 
       - name: Download and install Allure CLI
         run: |
-            curl -L -o allure.tgz https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-            tar -xzf allure.tgz
-            sudo mv allure-2.27.0 /opt/allure
-            sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-            allure --version
+          curl -L -o allure.tgz https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -xzf allure.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+          allure --version
 
       - name: Generate Allure report (if data exists)
         if: always()
         run: |
           if [ -d "test/allure-results" ] && [ "$(ls -A test/allure-results)" ]; then
+            rm -rf test/allure-report  
             allure generate test/allure-results --clean -o test/allure-report
           else
             echo "No Allure results found, skipping report generation."
