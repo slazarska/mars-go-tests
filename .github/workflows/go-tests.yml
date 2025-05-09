@@ -37,11 +37,18 @@ jobs:
           golangci-lint run ./...
 
       - name: Install Allure CLI
+        uses: actions/setup-java@v4
+        with:
+            distribution: 'temurin'
+            java-version: '17'
+
+      - name: Download and install Allure
         run: |
-          curl -o allure.zip -L https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.zip
-          unzip -q allure.zip -d /opt/
-          sudo mv /opt/allure-2.27.0 /opt/allure
-          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+                curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.tgz
+                tar -xzf allure.tgz
+                sudo mv allure-2.27.0 /opt/allure
+                sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+                allure --version
 
       - name: Generate Allure report (if data exists)
         if: always()
