@@ -42,7 +42,7 @@ func TestGetMarsPhotos(t *testing.T) {
 		for _, tt := range tests {
 			t.Run(tt.name, func(t provider.T) {
 				t.Title(tt.name)
-				t.Descriptionf("Test getting photos for Curiosity with camera %s on sol 3466", tt.camera)
+				t.Descriptionf("Test getting photos for Curiosity with camera %s on random sol", tt.camera)
 
 				t.WithParameters(
 					allure.NewParameter("Rover", tt.rover),
