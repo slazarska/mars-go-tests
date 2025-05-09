@@ -59,6 +59,13 @@ jobs:
             echo "No Allure results found, skipping report generation."
           fi
 
+      - name: Upload Allure report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: test/allure-report
+
       - name: Upload test results (optional, for debugging)
         if: failure()
         run: |
