@@ -13,121 +13,115 @@ import (
 )
 
 func TestGetMarsPhotosForRandomSol(t *testing.T) {
-	runner.Run(t, "Get photos by Curiosity and camera", func(t provider.T) {
-		t.Epic("Mars Open API")
-		t.Feature("Mars Rover's Photos")
-		t.Story("Mars Rover Curiosity's cameras")
-		t.Tags("Curiosity", "Mars", "API test", "Integration test")
-		t.Severity(allure.BLOCKER)
+	if err := config.SetupRealAPIKey(); err != nil {
+		log.Error("failed to setup real API key", "error", err)
+		return
+	}
 
-		if err := config.SetupRealAPIKey(); err != nil {
-			log.Error("failed to setup real API key", "error", err)
-			return
-		}
+	randomSol := testdata.GetRandomSolCuriosity()
 
-		randomSol := testdata.GetRandomSolCuriosity()
+	tests := []struct {
+		name   string
+		rover  string
+		camera string
+		sol    string
+	}{
+		{"Photos for rover Curiosity with camera FHAZ", "curiosity", "fhaz", randomSol},
+		{"Photos for rover Curiosity with camera RHAZ", "curiosity", "rhaz", randomSol},
+		{"Photos for rover Curiosity with camera MAST", "curiosity", "mast", randomSol},
+		{"Photos for rover Curiosity with camera CHEMCAM", "curiosity", "chemcam", randomSol},
+		{"Photos for rover Curiosity with camera MAHLI", "curiosity", "mahli", randomSol},
+		{"Photos for rover Curiosity with camera NAVCAM", "curiosity", "navcam", randomSol},
+		{"Photos for rover Curiosity with camera MARDI", "curiosity", "mardi", randomSol},
+	}
 
-		tests := []struct {
-			name   string
-			rover  string
-			camera string
-			sol    string
-		}{
-			{"Photos for rover Curiosity with camera FHAZ", "curiosity", "fhaz", randomSol},
-			{"Photos for rover Curiosity with camera RHAZ", "curiosity", "rhaz", randomSol},
-			{"Photos for rover Curiosity with camera MAST", "curiosity", "mast", randomSol},
-			{"Photos for rover Curiosity with camera CHEMCAM", "curiosity", "chemcam", randomSol},
-			{"Photos for rover Curiosity with camera MAHLI", "curiosity", "mahli", randomSol},
-			{"Photos for rover Curiosity with camera NAVCAM", "curiosity", "navcam", randomSol},
-			{"Photos for rover Curiosity with camera MARDI", "curiosity", "mardi", randomSol},
-		}
+	for _, tt := range tests {
+		runner.Run(t, tt.name, func(t provider.T) {
+			t.Epic("Mars Open API")
+			t.Feature("Mars Rover's Photos")
+			t.Story("Mars Rover Curiosity's cameras")
+			t.Tags("Curiosity", "Mars", "API test", "Integration test")
+			t.Severity(allure.BLOCKER)
+			t.Title(tt.name)
+			t.Descriptionf("Test getting photos for Curiosity with camera %s on random sol", tt.camera)
 
-		for _, tt := range tests {
-			t.Run(tt.name, func(t provider.T) {
-				t.Title(tt.name)
-				t.Descriptionf("Test getting photos for Curiosity with camera %s on random sol", tt.camera)
+			t.WithParameters(
+				allure.NewParameter("Rover", tt.rover),
+				allure.NewParameter("Camera", tt.camera),
+				allure.NewParameter("Sol", tt.sol),
+			)
 
-				t.WithParameters(
-					allure.NewParameter("Rover", tt.rover),
-					allure.NewParameter("Camera", tt.camera),
-					allure.NewParameter("Sol", tt.sol),
-				)
+			resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
 
-				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
-
-				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					steps.CheckError(sCtx, err, tt.sol, tt.camera)
-					steps.CheckResponse(sCtx, resp, tt.sol, tt.camera)
-					steps.LogPhotoCount(sCtx, resp, tt.sol, tt.camera)
-				})
-
-				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					steps.AttachResponseBodyJSON(sCtx, resp)
-					steps.AttachPhotoURLs(sCtx, resp)
-					steps.AttachFirstPhoto(sCtx, resp)
-				})
+			t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
+				steps.CheckError(sCtx, err, tt.sol, tt.camera)
+				steps.CheckResponse(sCtx, resp, tt.sol, tt.camera)
+				steps.LogPhotoCount(sCtx, resp, tt.sol, tt.camera)
 			})
-		}
-	})
+
+			t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
+				steps.AttachResponseBodyJSON(sCtx, resp)
+				steps.AttachPhotoURLs(sCtx, resp)
+				steps.AttachFirstPhoto(sCtx, resp)
+			})
+		})
+	}
 }
 
 func TestGetMarsPhotosForCurrentSol(t *testing.T) {
-	runner.Run(t, "Get photos by Curiosity and camera", func(t provider.T) {
-		t.Epic("Mars Open API")
-		t.Feature("Mars Rover's Photos")
-		t.Story("Mars Rover Curiosity's cameras")
-		t.Tags("Curiosity", "Mars", "API test", "Integration test")
-		t.Severity(allure.BLOCKER)
+	if err := config.SetupRealAPIKey(); err != nil {
+		log.Error("failed to setup real API key", "error", err)
+		return
+	}
 
-		if err := config.SetupRealAPIKey(); err != nil {
-			log.Error("failed to setup real API key", "error", err)
-			return
-		}
+	currentSol := testdata.GetRandomSolCuriosity()
 
-		currentSol := testdata.GetRandomSolCuriosity()
+	tests := []struct {
+		name   string
+		rover  string
+		camera string
+		sol    string
+	}{
+		{"Photos for rover Curiosity with camera FHAZ", "curiosity", "fhaz", currentSol},
+		{"Photos for rover Curiosity with camera RHAZ", "curiosity", "rhaz", currentSol},
+		{"Photos for rover Curiosity with camera MAST", "curiosity", "mast", currentSol},
+		{"Photos for rover Curiosity with camera CHEMCAM", "curiosity", "chemcam", currentSol},
+		{"Photos for rover Curiosity with camera MAHLI", "curiosity", "mahli", currentSol},
+		{"Photos for rover Curiosity with camera NAVCAM", "curiosity", "navcam", currentSol},
+		{"Photos for rover Curiosity with camera MARDI", "curiosity", "mardi", currentSol},
+	}
 
-		tests := []struct {
-			name   string
-			rover  string
-			camera string
-			sol    string
-		}{
-			{"Photos for rover Curiosity with camera FHAZ", "curiosity", "fhaz", currentSol},
-			{"Photos for rover Curiosity with camera RHAZ", "curiosity", "rhaz", currentSol},
-			{"Photos for rover Curiosity with camera MAST", "curiosity", "mast", currentSol},
-			{"Photos for rover Curiosity with camera CHEMCAM", "curiosity", "chemcam", currentSol},
-			{"Photos for rover Curiosity with camera MAHLI", "curiosity", "mahli", currentSol},
-			{"Photos for rover Curiosity with camera NAVCAM", "curiosity", "navcam", currentSol},
-			{"Photos for rover Curiosity with camera MARDI", "curiosity", "mardi", currentSol},
-		}
+	for _, tt := range tests {
+		runner.Run(t, tt.name, func(t provider.T) {
+			t.Epic("Mars Open API")
+			t.Feature("Mars Rover's Photos")
+			t.Story("Mars Rover Curiosity's cameras")
+			t.Tags("Curiosity", "Mars", "API test", "Integration test")
+			t.Severity(allure.BLOCKER)
+			t.Title(tt.name)
+			t.Descriptionf("Test getting photos for Curiosity with camera %s for current sol", tt.camera)
 
-		for _, tt := range tests {
-			t.Run(tt.name, func(t provider.T) {
-				t.Title(tt.name)
-				t.Descriptionf("Test getting photos for Curiosity with camera %s for current sol", tt.camera)
+			t.WithParameters(
+				allure.NewParameter("Rover", tt.rover),
+				allure.NewParameter("Camera", tt.camera),
+				allure.NewParameter("Sol", tt.sol),
+			)
 
-				t.WithParameters(
-					allure.NewParameter("Rover", tt.rover),
-					allure.NewParameter("Camera", tt.camera),
-					allure.NewParameter("Sol", tt.sol),
-				)
+			resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
 
-				resp, err := api.GetMarsPhotos(tt.rover, tt.camera, tt.sol)
-
-				t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
-					steps.CheckError(sCtx, err, tt.sol, tt.camera)
-					steps.CheckResponse(sCtx, resp, tt.sol, tt.camera)
-					steps.LogPhotoCount(sCtx, resp, tt.sol, tt.camera)
-				})
-
-				t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
-					steps.AttachResponseBodyJSON(sCtx, resp)
-					steps.AttachPhotoURLs(sCtx, resp)
-					steps.AttachFirstPhoto(sCtx, resp)
-				})
+			t.WithNewStep("Assertions", func(sCtx provider.StepCtx) {
+				steps.CheckError(sCtx, err, tt.sol, tt.camera)
+				steps.CheckResponse(sCtx, resp, tt.sol, tt.camera)
+				steps.LogPhotoCount(sCtx, resp, tt.sol, tt.camera)
 			})
-		}
-	})
+
+			t.WithNewStep("Attach additional info", func(sCtx provider.StepCtx) {
+				steps.AttachResponseBodyJSON(sCtx, resp)
+				steps.AttachPhotoURLs(sCtx, resp)
+				steps.AttachFirstPhoto(sCtx, resp)
+			})
+		})
+	}
 }
 
 func TestGetMarsPhotosInvalidRoverReturnsError(t *testing.T) {
