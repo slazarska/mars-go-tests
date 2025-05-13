@@ -12,16 +12,28 @@ import (
 
 var apiKey string
 
-func SetAPIKey(key string) {
-	apiKey = key
-}
-
 func APIKey() string {
 	return apiKey
 }
 
-func LoadConfig() error {
+func SetAPIKey(key string) {
+	apiKey = key
+}
 
+func SetTestAPIKey() {
+	SetAPIKey("test_key")
+}
+
+func SetupRealAPIKey() error {
+	if err := LoadConfig(); err != nil {
+		log.Error("failed to load config", "error", err)
+		return err
+	}
+	log.Info("API key was set successfully")
+	return nil
+}
+
+func LoadConfig() error {
 	if envKey := os.Getenv("NASA_API_KEY"); envKey != "" {
 		apiKey = envKey
 		log.Info("loaded API key from environment variable")
@@ -41,11 +53,7 @@ func LoadConfig() error {
 		log.Error("failed to open config file", "error", err)
 		return fmt.Errorf("failed to open config file: %w", err)
 	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			log.Error("failed to close config file", "error", err)
-		}
-	}()
+	defer file.Close()
 
 	var config struct {
 		APIKey string `json:"api_key"`

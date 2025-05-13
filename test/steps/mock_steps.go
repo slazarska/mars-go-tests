@@ -25,7 +25,7 @@ func PrepareMockServer(t provider.T, filename string) (*httptest.Server, string,
 }
 
 func startMockServer(mockResp models.RoverResponse) *httptest.Server {
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	handler := http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(mockResp)
 	})
 	server := httptest.NewServer(handler)
@@ -56,7 +56,7 @@ func LoadMockJSON(t provider.T, filename string, target interface{}) error {
 }
 
 func InternalServerErrorHandler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte("Internal Server Error"))
 	})

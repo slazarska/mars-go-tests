@@ -4,6 +4,7 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/slazarska/mars-go-tests/internal/api"
+	"github.com/slazarska/mars-go-tests/internal/config"
 	"github.com/slazarska/mars-go-tests/test/steps"
 	"github.com/stretchr/testify/assert"
 	"net/http/httptest"
@@ -17,7 +18,7 @@ func TestMockWithOnePhoto(t *testing.T) {
 		t.Story("Mock-server")
 		t.Tags("mock", "mock-test")
 
-		steps.SetTestAPIKey()
+		config.SetTestAPIKey()
 
 		server, mockBaseURL, err := steps.PrepareMockServer(t, "mock_response.json")
 		assert.NoError(t, err)
@@ -43,7 +44,7 @@ func TestMockWithEmptyPhotoList(t *testing.T) {
 		t.Story("Mock-server")
 		t.Tags("mock", "mock-test")
 
-		steps.SetTestAPIKey()
+		config.SetTestAPIKey()
 
 		server, mockBaseURL, err := steps.PrepareMockServer(t, "empty_response.json")
 		assert.NoError(t, err)
@@ -57,7 +58,7 @@ func TestMockWithEmptyPhotoList(t *testing.T) {
 			steps.CheckNoError(sCtx, err)
 		})
 
-		t.WithNewStep("Check the list of photos is empty", func(sCtx provider.StepCtx) {
+		t.WithNewStep("Check the list of photos is empty", func(_ provider.StepCtx) {
 			steps.CheckEmptyPhotos(t, resp)
 		})
 	})
@@ -70,7 +71,7 @@ func TestMockInternalServerError(t *testing.T) {
 		t.Story("Mock-server")
 		t.Tags("mock", "mock-test")
 
-		steps.SetTestAPIKey()
+		config.SetTestAPIKey()
 
 		handler := steps.InternalServerErrorHandler()
 		server := httptest.NewServer(handler)

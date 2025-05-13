@@ -5,6 +5,8 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/slazarska/mars-go-tests/internal/api"
+	"github.com/slazarska/mars-go-tests/internal/config"
+	"github.com/slazarska/mars-go-tests/internal/log"
 	"github.com/slazarska/mars-go-tests/test/steps"
 	"github.com/slazarska/mars-go-tests/test/testdata"
 	"testing"
@@ -18,7 +20,10 @@ func TestGetMarsPhotosForRandomSol(t *testing.T) {
 		t.Tags("Curiosity", "Mars", "API test", "Integration test")
 		t.Severity(allure.BLOCKER)
 
-		steps.SetupRealAPIKey(t)
+		if err := config.SetupRealAPIKey(); err != nil {
+			log.Error("failed to setup real API key", "error", err)
+			return
+		}
 
 		randomSol := testdata.GetRandomSolCuriosity()
 
@@ -74,7 +79,10 @@ func TestGetMarsPhotosForCurrentSol(t *testing.T) {
 		t.Tags("Curiosity", "Mars", "API test", "Integration test")
 		t.Severity(allure.BLOCKER)
 
-		steps.SetupRealAPIKey(t)
+		if err := config.SetupRealAPIKey(); err != nil {
+			log.Error("failed to setup real API key", "error", err)
+			return
+		}
 
 		currentSol := testdata.GetRandomSolCuriosity()
 
@@ -130,7 +138,10 @@ func TestGetMarsPhotosInvalidRoverReturnsError(t *testing.T) {
 		t.Tags("Error", "Mars", "API test", "Integration test")
 		t.Severity(allure.MINOR)
 
-		steps.SetupRealAPIKey(t)
+		if err := config.SetupRealAPIKey(); err != nil {
+			log.Error("failed to setup real API key", "error", err)
+			return
+		}
 
 		testSol := testdata.GetRandomSolCuriosity()
 
@@ -154,7 +165,10 @@ func TestGetMarsPhotosInvalidCameraReturnsEmptyList(t *testing.T) {
 		t.Tags("Error", "Mars", "API test", "Integration test")
 		t.Severity(allure.MINOR)
 
-		steps.SetupRealAPIKey(t)
+		if err := config.SetupRealAPIKey(); err != nil {
+			log.Error("failed to setup real API key", "error", err)
+			return
+		}
 
 		testSol := testdata.GetRandomSolCuriosity()
 
