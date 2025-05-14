@@ -11,10 +11,6 @@ import (
 	"net/http"
 )
 
-func SetAPIKey(key string) {
-	config.SetAPIKey(key)
-}
-
 func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models.RoverResponse, error) {
 	apiKey := config.APIKey()
 	if apiKey == "" {
