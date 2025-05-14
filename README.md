@@ -76,8 +76,8 @@ go test ./...
 You'll see real-time responses from NASA's Open API being tested.
 
 ## Allure Report is generated during test execution:
-![allure screenshot](images/allure_00.jpg)
-![allure screenshot](images/allure_01.jpg)
+![allure screenshot](images/allure_00.png)
+![allure screenshot](images/allure_01.png)
 
 The report includes detailed information about the tests, with various attachments such as:
 
