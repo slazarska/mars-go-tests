@@ -2,8 +2,8 @@ package steps
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
+	"github.com/slazarska/mars-go-tests/internal/log"
 	"github.com/slazarska/mars-go-tests/internal/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -16,6 +16,7 @@ func PrepareMockServer(t provider.T, filename string) (*httptest.Server, string,
 	var mockResp models.RoverResponse
 	err := LoadMockJSON(t, filename, &mockResp)
 	if err != nil {
+		log.Error("failed to load mock JSON", "error", err)
 		return nil, "", err
 	}
 
@@ -37,19 +38,22 @@ func LoadMockJSON(t provider.T, filename string, target interface{}) error {
 
 	dir, err := os.Getwd()
 	if err != nil {
-		return fmt.Errorf("failed to get working directory: %v", err)
+		log.Error("failed to get working directory", "error", err)
+		return err
 	}
 
 	path := filepath.Join(dir, "testdata", filename)
-	t.Logf("loading mock file from: %s", path)
+	log.Info("loading mock file from: %s", path)
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("failed to read mock file %s: %v", filename, err)
+		log.Error("failed to read mock file", "error", err, "filename", filename)
+		return err
 	}
 
 	if err := json.Unmarshal(data, target); err != nil {
-		return fmt.Errorf("failed to unmarshal mock JSON: %v", err)
+		log.Error("failed to unmarshal mock JSON", "error", err, "filename", filename)
+		return err
 	}
 
 	return nil

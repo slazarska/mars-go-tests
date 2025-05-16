@@ -15,8 +15,8 @@ func TestMockWithOnePhoto(t *testing.T) {
 	runner.Run(t, "MockWithOnePhoto", func(t provider.T) {
 		t.Epic("Mars Open API")
 		t.Feature("Mars Rover's Photos")
-		t.Story("Mock-server")
-		t.Tags("mock", "mock-test")
+		t.Story("Mock server")
+		t.Tags("mock test")
 
 		config.SetTestAPIKey()
 
@@ -41,8 +41,8 @@ func TestMockWithEmptyPhotoList(t *testing.T) {
 	runner.Run(t, "MockWithEmptyPhotoList", func(t provider.T) {
 		t.Epic("Mars Open API")
 		t.Feature("Mars Rover's Photos")
-		t.Story("Mock-server")
-		t.Tags("mock", "mock-test")
+		t.Story("Mock server")
+		t.Tags("mock-test")
 
 		config.SetTestAPIKey()
 
@@ -68,8 +68,8 @@ func TestMockInternalServerError(t *testing.T) {
 	runner.Run(t, "MockInternalServerError", func(t provider.T) {
 		t.Epic("Mars Open API")
 		t.Feature("Mar Rover's Photos")
-		t.Story("Mock-server")
-		t.Tags("mock", "mock-test")
+		t.Story("Mock server")
+		t.Tags("mock-test")
 
 		config.SetTestAPIKey()
 

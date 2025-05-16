@@ -1,6 +1,6 @@
 # mars-go-tests
 
-![Go Version](https://img.shields.io/badge/Go-1.20%2B-blue)
+![Go Version](https://img.shields.io/badge/Go-1.24-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Go Tests](https://github.com/slazarska/mars-go-tests/actions/workflows/go-tests.yml/badge.svg)
 
@@ -8,7 +8,7 @@
 
 A small educational project with API tests in Go for Mars Rover Photos by NASA Open APIs. 
 
-## 🛰️ Project Description
+## 🛰️ In a nutshell about the project:
 
 This project demonstrates how to build and test a simple HTTP client in Go. 
 It interacts with the [NASA Mars Rover Photos API](https://api.nasa.gov/) to fetch images taken by the rover *Curiosity*.
@@ -18,7 +18,7 @@ It includes:
 - Real API integration
 - Struct-based JSON decoding
 - Table-driven integration tests
-- Mock-tests
+- Mock tests
 - Positive and negative tests
 - Logging with slog
 - Allure reports
@@ -32,7 +32,7 @@ mars-go-tests/
 ├── .github/             # GitHub Actions
 │   ├── workflows/       # CI/CD workflows
 ├── internal/
-│   ├── api/             # API client logic
+│   ├── api/             # easy HTTP Client
 │   ├── config/          # Configuration loading
 │   ├── constants/       # Base URL
 │   ├── log/             # Logger
@@ -70,12 +70,11 @@ Important: This file is ignored by Git. Do not commit your API key.
 
 ### 4. Run the tests
 ```bash
-cd test
 go test ./... 
 ```
 You'll see real-time responses from NASA's Open API being tested.
 
-## Allure Report is generated during test execution:
+## 📊 Allure Report is generated during test execution:
 ![allure screenshot](images/allure_00.png)
 ![allure screenshot](images/allure_01.png)
 
@@ -88,22 +87,33 @@ The report includes detailed information about the tests, with various attachmen
 If running locally, to check the Allure Report, enter on the command line:
 ```bash
 cd test
+cd go test ./...
 allure serve allure-results # This command will generate the report only when run from the 'test' directory
 ```
 
-## To run the project in a Docker container, follow these steps:
+## 🐳 Docker 
+To run the project in a Docker container, follow these steps:
 
 ### 1. Build the Docker image:
 ```bash
 docker build -t mars-go-tests .
 ```
-### 2. Run the container:
+### 2. Run the container with allure report:
+for Windows
 ```bash
-docker run -it --rm mars-go-tests
+docker run --rm -it -v %cd%/test/allure-report:/app/test/allure-report mars-go-tests
 ```
-This will run the tests and build the application inside the container.
+for Linux/macOS
+```bash
+docker run --rm -it -v $(pwd)/test/allure-report:/app/test/allure-report mars-go-tests
+```
+If you have [Allure CLI](https://allurereport.org/docs/#_installing_a_commandline) installed, you can open the allure report from the command line.
+```bash
+allure open ./test/allure-report
+```
+If not, you can view the report by opening the file .test/allure-report/index.html in any browser.
 
-## GitHub Actions
+## ⚙️ GitHub Actions
 The project uses GitHub Actions for continuous integration. The workflow file is located in .github/workflows/.
 It includes the following steps:
 - Set up Go environment
@@ -115,14 +125,14 @@ The workflow triggers automatically on push to the main branch.
 You can view the build history and results on the [GitHub Actions page](https://github.com/slazarska/mars-go-tests/actions).
 Additionally, you can download the generated Allure report as an artifact from the build results.
 
-### Dependencies
+### 📦 Dependencies
 - [Testify](https://github.com/stretchr/testify) for assertions
 - [Allure-go](https://github.com/ozontech/allure-go) for test reporting 
 - [golangci-lint](https://github.com/golangci/golangci-lint) for linting
 - Standard Go modules (`go.mod`, `go.sum`)
 
-### License
+### 📝 License
 MIT — feel free to use for educational purposes.
 
-### Author
+### 🌺 Author
 Maintained by [@slazarska](https://github.com/slazarska)

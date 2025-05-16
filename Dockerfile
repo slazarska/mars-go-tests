@@ -1,30 +1,30 @@
-# Stage 1: builder
+# Stage 1: Builder — сборка и тесты
 FROM golang:1.24 AS builder
 
 WORKDIR /app
 
-# Copy go.mod and go.sum first
 COPY go.mod go.sum ./
+RUN go mod download
 
-# Copy all source files *before* tidy
-COPY ./cmd ./cmd
-COPY ./internal ./internal
-COPY ./test ./test
+COPY . .
 
-# Now that all Go files are present, tidy will catch all dependencies
-RUN go mod tidy
+RUN mkdir -p ./test/allure-results
 
-# Run tests
-RUN go test ./... -v
+RUN go test ./...
 
-# Stage 2: runtime image
-FROM alpine:latest
+# Stage 2: Allure
+FROM ubuntu:22.04
 
-RUN apk --no-cache add ca-certificates
+RUN apt-get update && \
+    apt-get install -y curl unzip openjdk-11-jre-headless && \
+    curl -L https://github.com/allure-framework/allure2/releases/download/2.22.1/allure-2.22.1.zip -o /tmp/allure.zip && \
+    unzip /tmp/allure.zip -d /opt/ && \
+    ln -s /opt/allure-2.22.1/bin/allure /usr/bin/allure && \
+    rm /tmp/allure.zip && \
+    apt-get clean
 
 WORKDIR /app
 
-COPY --from=builder /app/cmd /app/cmd
-COPY --from=builder /app/internal /app/internal
+COPY --from=builder /app/test/allure-results ./test/allure-results
 
-CMD ["/bin/sh"]
+CMD ["allure", "generate", "./test/allure-results", "-o", "./test/allure-report", "--clean"]

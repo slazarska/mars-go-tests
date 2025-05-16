@@ -14,6 +14,7 @@ import (
 func GetMarsPhotos(rover, camera, solValue string, customURL ...string) (*models.RoverResponse, error) {
 	apiKey := config.APIKey()
 	if apiKey == "" {
+		log.Error("API key is missing")
 		return nil, fmt.Errorf("API key is missing")
 	}
 
